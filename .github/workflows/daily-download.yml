@@ -1,0 +1,42 @@
+name: Daily Weir Download
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ImageMagick
+        run: sudo apt-get install -y libmagick++-dev
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            cli
+            magick
+            httr2
+            lubridate
+
+      - name: Run weir_download.R
+        run: Rscript weir_download.R
+
+      - name: Commit and push new files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pics/ README.md
+          git diff --cached --quiet || git commit -m "chore: daily weir image update $(date -u +%Y-%m-%d)"
+          git push
