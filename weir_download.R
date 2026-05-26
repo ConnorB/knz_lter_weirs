@@ -3,6 +3,8 @@ library(cli)
 library(magick)
 library(httr2)
 library(lubridate)
+# Make sure output dir exist
+dir.create("pics", showWarnings = FALSE)
 
 # Base URL for the Konza Prairie LTER weir data
 # Note: server rejects HTTPS GET requests for these GIFs; HEAD works but GET does not
