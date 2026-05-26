@@ -2,7 +2,7 @@ name: Daily Weir Download
 
 on:
   schedule:
-    # Runs daily at 00:00 UTC
+	# Runs daily at 00:00 UTC
     - cron: "0 0 * * *"
   workflow_dispatch:
 
@@ -30,12 +30,8 @@ jobs:
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: |
-            any::cli
-            any::magick
-            any::httr2
-            any::lubridate
-			
+          packages: any::cli, any::magick, any::httr2, any::lubridate
+
       - name: Run weir download
         run: Rscript weir_download.R
 
